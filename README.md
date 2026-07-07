@@ -1,6 +1,6 @@
 # Météo
 
-![Bannière](Design%20sans%20titre.png)
+![Bannière](Design%20sans%20titre-2.png)
 
 ## Station météo amateur à Thonon-les-Bains
 
