@@ -57,6 +57,15 @@ async function chargerDonnees() {
 
     html += "</table>";
 
+    // Dernière ligne du fichier = dernières mesures
+const derniere = lignes[lignes.length - 1].split(";");
+
+// Remplit les cartes
+document.getElementById("temp").textContent = derniere[3] + " °C";
+document.getElementById("hum").textContent = derniere[4] + " %";
+document.getElementById("pres").textContent = derniere[2] + " hPa";
+document.getElementById("vent").textContent = derniere[7] + " km/h";
+document.getElementById("rafale").textContent = derniere[8] + " km/h";
     document.getElementById("tableau").innerHTML = html;
 
 }
