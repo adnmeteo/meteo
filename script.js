@@ -98,6 +98,21 @@ derniere[0] + " à " + derniere[1];
 
     html += "</table>";
 
+    // =========================
+// Données du graphique
+// =========================
+
+const heures = [];
+const temperatures = [];
+
+for (let i = 4; i < lignes.length; i++) {
+
+    const colonnes = lignes[i].split(";");
+
+    heures.push(colonnes[1]);
+    temperatures.push(parseFloat(colonnes[3]));
+
+}
     document.getElementById("tableau").innerHTML = html;
 
 }
