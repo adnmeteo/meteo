@@ -1,5 +1,5 @@
 // ==========================================
-// ADN MÉTÉO
+// RELEVÉS MÉTÉO - BRESSER 5-EN-1
 // Lecture du fichier latest.csv
 // ==========================================
 
@@ -23,9 +23,11 @@ async function chargerDonnees() {
     // ==========================================
 
     const derniere = lignes[lignes.length - 1].split(";");
+
     document.getElementById("maj").textContent =
-"🕒 Dernière observation : " +
-derniere[0] + " à " + derniere[1];
+        "🕒 Dernière observation : " +
+        derniere[0] + " à " + derniere[1];
+
     document.getElementById("temp").textContent = derniere[3] + " °C";
     document.getElementById("hum").textContent = derniere[4] + " %";
     document.getElementById("pres").textContent = derniere[2] + " hPa";
@@ -76,13 +78,21 @@ derniere[0] + " à " + derniere[1];
 
     html += "</tr>";
 
-    // Les données commencent après les 4 lignes d'en-tête Bresser
+    // ==========================================
+    // DONNÉES
+    // ==========================================
+
+    const heures = [];
+    const temperatures = [];
 
     for (let i = 4; i < lignes.length; i++) {
 
         const colonnes = lignes[i].split(";");
 
         if (colonnes.length < titres.length) continue;
+
+        heures.push(colonnes[1]);
+        temperatures.push(parseFloat(colonnes[3]));
 
         html += "<tr>";
 
@@ -98,22 +108,87 @@ derniere[0] + " à " + derniere[1];
 
     html += "</table>";
 
-    // =========================
-// Données du graphique
-// =========================
-
-const heures = [];
-const temperatures = [];
-
-for (let i = 4; i < lignes.length; i++) {
-
-    const colonnes = lignes[i].split(";");
-
-    heures.push(colonnes[1]);
-    temperatures.push(parseFloat(colonnes[3]));
-
-}
     document.getElementById("tableau").innerHTML = html;
+
+    // ==========================================
+    // GRAPHIQUE TEMPÉRATURE
+    // ==========================================
+
+    new Chart(document.getElementById("graphTemp"), {
+
+        type: "line",
+
+        data: {
+
+            labels: heures,
+
+            datasets: [{
+
+                label: "Température (°C)",
+
+                data: temperatures,
+
+                borderColor: "#4fc3f7",
+
+                backgroundColor: "rgba(79,195,247,0.2)",
+
+                borderWidth: 2,
+
+                fill: true,
+
+                pointRadius: 0,
+
+                tension: 0.3
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    labels: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                },
+
+                y: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
 
 }
 
