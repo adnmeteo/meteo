@@ -9,10 +9,8 @@ async function chargerDonnees() {
     const reponse = await fetch("data/latest.csv");
     const texte = await reponse.text();
 
-    // Découpage ligne par ligne
     const lignes = texte.trim().split("\n");
 
-    // Vérifie qu'il existe des données
     if (lignes.length < 5) {
         console.log("Pas assez de données.");
         return;
@@ -62,17 +60,11 @@ async function chargerDonnees() {
         "°C"
     ];
 
-    let html = "<table>";
-
-    html += "<tr>";
+    let html = "<table><tr>";
 
     for (let i = 0; i < titres.length; i++) {
 
-        html += `
-        <th>
-            ${titres[i]}
-            ${unites[i] ? `<br><small>${unites[i]}</small>` : ""}
-        </th>`;
+        html += `<th>${titres[i]}${unites[i] ? `<br><small>${unites[i]}</small>` : ""}</th>`;
 
     }
 
@@ -84,15 +76,23 @@ async function chargerDonnees() {
 
     const heures = [];
     const temperatures = [];
+    const humidites = [];
+    const pressions = [];
+    const pointRosee = [];
+    const indiceChaleur = [];
 
     for (let i = lignes.length - 1; i >= 4; i--) {
-        
+
         const colonnes = lignes[i].split(";");
 
         if (colonnes.length < titres.length) continue;
 
         heures.push(colonnes[1]);
+        pressions.push(parseFloat(colonnes[2]));
         temperatures.push(parseFloat(colonnes[3]));
+        humidites.push(parseFloat(colonnes[4]));
+        pointRosee.push(parseFloat(colonnes[5]));
+        indiceChaleur.push(parseFloat(colonnes[6]));
 
         html += "<tr>";
 
@@ -111,10 +111,50 @@ async function chargerDonnees() {
     document.getElementById("tableau").innerHTML = html;
 
     // ==========================================
-    // GRAPHIQUE TEMPÉRATURE
+    // LISTE DES VARIABLES
     // ==========================================
 
-    new Chart(document.getElementById("graphTemp"), {
+    const variables = {
+
+        temperature: {
+            label: "🌡️ Température (°C)",
+            data: temperatures,
+            couleur: "#4fc3f7"
+        },
+
+        humidite: {
+            label: "💧 Humidité (%)",
+            data: humidites,
+            couleur: "#64ffda"
+        },
+
+        pression: {
+            label: "📈 Pression (hPa)",
+            data: pressions,
+            couleur: "#ffd54f"
+        },
+
+        rosee: {
+            label: "🌫️ Point de rosée (°C)",
+            data: pointRosee,
+            couleur: "#ba68c8"
+        },
+
+        chaleur: {
+            label: "🔥 Indice de chaleur (°C)",
+            data: indiceChaleur,
+            couleur: "#ff7043"
+        }
+
+    };
+
+    // ==========================================
+    // GRAPHIQUE
+    // ==========================================
+
+    const ctx = document.getElementById("graphTemp");
+
+    const graphique = new Chart(ctx, {
 
         type: "line",
 
@@ -124,13 +164,13 @@ async function chargerDonnees() {
 
             datasets: [{
 
-                label: "Température (°C)",
+                label: variables.temperature.label,
 
-                data: temperatures,
+                data: variables.temperature.data,
 
-                borderColor: "#4fc3f7",
+                borderColor: variables.temperature.couleur,
 
-                backgroundColor: "rgba(79,195,247,0.2)",
+                backgroundColor: variables.temperature.couleur + "33",
 
                 borderWidth: 2,
 
@@ -187,6 +227,23 @@ async function chargerDonnees() {
             }
 
         }
+
+    });
+
+    // ==========================================
+    // CHANGEMENT DE COURBE
+    // ==========================================
+
+    document.getElementById("choixGraph").addEventListener("change", function () {
+
+        const choix = variables[this.value];
+
+        graphique.data.datasets[0].label = choix.label;
+        graphique.data.datasets[0].data = choix.data;
+        graphique.data.datasets[0].borderColor = choix.couleur;
+        graphique.data.datasets[0].backgroundColor = choix.couleur + "33";
+
+        graphique.update();
 
     });
 
