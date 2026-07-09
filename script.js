@@ -19,12 +19,12 @@ async function chargerDonnees() {
         "🥶 Refroidissement éolien"
     ];
 
-    // Unités (3e ligne du fichier)
-    const unites = lignes[2].split(";");
+    // Unités (4e ligne du fichier Bresser)
+    const unites = lignes[3].split(";");
 
     let html = "<table>";
 
-    // Première ligne : les titres
+    // Ligne des titres
     html += "<tr>";
 
     for (let i = 0; i < titres.length; i++) {
@@ -32,7 +32,7 @@ async function chargerDonnees() {
         let titre = titres[i];
 
         if (unites[i]) {
-            titre += "<br><small>" + unites[i] + "</small>";
+            titre += `<br><small>${unites[i]}</small>`;
         }
 
         html += `<th>${titre}</th>`;
@@ -40,10 +40,12 @@ async function chargerDonnees() {
 
     html += "</tr>";
 
-    // Les données commencent à la 4e ligne
-    for (let i = 3; i < lignes.length; i++) {
+    // Les données commencent après les 4 lignes d'en-tête
+    for (let i = 4; i < lignes.length; i++) {
 
         const colonnes = lignes[i].split(";");
+
+        if (colonnes.length < titres.length) continue;
 
         html += "<tr>";
 
@@ -57,6 +59,7 @@ async function chargerDonnees() {
     html += "</table>";
 
     document.getElementById("tableau").innerHTML = html;
+
 }
 
 chargerDonnees();
