@@ -5,29 +5,46 @@ async function chargerDonnees() {
 
     const lignes = texte.trim().split("\n");
 
+    // Fusion des 3 lignes d'en-têtes du fichier Bresser
+    const titres = lignes[0].split(";").map(s => s.replace(/"/g,""));
+    const sousTitres = lignes[1].split(";");
+    const unites = lignes[2].split(";");
+
     let html = "<table>";
 
-    lignes.forEach((ligne, index) => {
+    html += "<tr>";
 
-        const colonnes = ligne.split(";");
+    for(let i=0;i<titres.length;i++){
+
+        let titre = titres[i];
+
+        if(sousTitres[i])
+            titre += " " + sousTitres[i];
+
+        if(unites[i])
+            titre += "<br><small>" + unites[i] + "</small>";
+
+        html += `<th>${titre}</th>`;
+    }
+
+    html += "</tr>";
+
+    // Les données commencent à la 4e ligne
+    for(let i=3;i<lignes.length;i++){
 
         html += "<tr>";
 
-        colonnes.forEach(colonne => {
+        const colonnes = lignes[i].split(";");
 
-            colonne = colonne.replaceAll('"', '');
+        colonnes.forEach(colonne=>{
 
-            if (index === 0) {
-                html += `<th>${colonne}</th>`;
-            } else {
-                html += `<td>${colonne}</td>`;
-            }
+            html += `<td>${colonne}</td>`;
 
         });
 
         html += "</tr>";
 
-    });
+    }
 
     html += "</table>";
 
