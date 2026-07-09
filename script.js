@@ -6,8 +6,26 @@ async function chargerDonnees() {
     const lignes = texte.trim().split("\n");
 
     // Fusion des 3 lignes d'en-têtes du fichier Bresser
-    const titres = lignes[0].split(";").map(s => s.replace(/"/g,""));
-    const sousTitres = lignes[1].split(";");
+   const titres = [
+"📅 Date",
+"🕒 Heure",
+"📈 Pression",
+"🌡️ Température",
+"💧 Humidité",
+"🌫️ Point de rosée",
+"🔥 Indice de chaleur",
+"🌬️ Vent moyen",
+"💨 Rafale",
+"🥶 Refroidissement éolien"
+];
+
+html += "<tr>";
+
+titres.forEach(titre => {
+    html += `<th>${titre}</th>`;
+});
+
+html += "</tr>";    const sousTitres = lignes[1].split(";");
     const unites = lignes[2].split(";");
 
     let html = "<table>";
