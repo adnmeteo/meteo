@@ -23,7 +23,9 @@ async function chargerDonnees() {
     // ==========================================
 
     const derniere = lignes[lignes.length - 1].split(";");
-
+    document.getElementById("maj").textContent =
+"🕒 Dernière observation : " +
+derniere[0] + " à " + derniere[1];
     document.getElementById("temp").textContent = derniere[3] + " °C";
     document.getElementById("hum").textContent = derniere[4] + " %";
     document.getElementById("pres").textContent = derniere[2] + " hPa";
