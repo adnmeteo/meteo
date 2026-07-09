@@ -10,16 +10,20 @@
 
 <link rel="stylesheet" href="style.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
+
 <div id="top"></div>
+
 <header>
 
 <h1>🌤️ Relevés météo</h1>
+
 <p>Station Bresser 5-en-1</p>
+
 <p>📍 Thonon-les-Bains (Haute-Savoie)</p>
 
 </header>
@@ -29,7 +33,7 @@
 <a href="#top">🏠 Accueil</a>
 
 <a href="#donnees">📊 Données</a>
-  
+
 <a href="#graphiques">📈 Graphiques</a>
 
 <a href="#observations">📝 Observations</a>
@@ -41,6 +45,10 @@
 </nav>
 
 <main>
+
+<!-- ========================= -->
+<!-- ACCUEIL -->
+<!-- ========================= -->
 
 <section id="accueil">
 
@@ -67,34 +75,60 @@
 
 </div>
 
+</section>
+
+<!-- ========================= -->
+<!-- DONNÉES -->
+<!-- ========================= -->
+
 <section id="donnees">
 
 <h2>📊 Données météo</h2>
 
 <div id="tableau"></div>
 
+</section>
+
+<!-- ========================= -->
+<!-- GRAPHIQUES -->
+<!-- ========================= -->
+
 <section id="graphiques">
 
 <h2>📈 Graphiques</h2>
 
-<select id="choixGraph">
+<div class="graph-buttons">
 
-    <option value="temperature">🌡️ Température</option>
+<button class="graph-btn active" data-graph="temperature">
+🌡️ Température
+</button>
 
-    <option value="humidite">💧 Humidité</option>
+<button class="graph-btn" data-graph="humidite">
+💧 Humidité
+</button>
 
-    <option value="pression">📈 Pression</option>
+<button class="graph-btn" data-graph="pression">
+📈 Pression
+</button>
 
-    <option value="rosee">🌫️ Point de rosée</option>
+<button class="graph-btn" data-graph="rosee">
+🌫️ Point de rosée
+</button>
 
-    <option value="chaleur">🔥 Indice de chaleur</option>
+<button class="graph-btn" data-graph="chaleur">
+🔥 Indice de chaleur
+</button>
 
-</select>
+</div>
 
 <canvas id="graphTemp"></canvas>
 
 </section>
-  
+
+<!-- ========================= -->
+<!-- OBSERVATIONS -->
+<!-- ========================= -->
+
 <section id="observations">
 
 <h2>📝 Observations météo</h2>
@@ -102,6 +136,10 @@
 <p>🚧 Cette rubrique sera bientôt disponible.</p>
 
 </section>
+
+<!-- ========================= -->
+<!-- GALERIE -->
+<!-- ========================= -->
 
 <section id="galerie">
 
@@ -111,21 +149,18 @@
 
 </section>
 
+<!-- ========================= -->
+<!-- STATION -->
+<!-- ========================= -->
+
 <section id="station">
 
-<h2>ℹ️ La station</h2>
+<h2>🛰️ La station</h2>
 
 <p>🚧 Présentation de la station à venir.</p>
 
 </section>
-  
-  <section id="graphiques">
 
-<h2>📈 Graphiques</h2>
-
-<p>Les graphiques arriveront bientôt...</p>
-
-</section>
 </main>
 
 <script src="script.js"></script>
