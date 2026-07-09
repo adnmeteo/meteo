@@ -5,55 +5,54 @@ async function chargerDonnees() {
 
     const lignes = texte.trim().split("\n");
 
-    // Titres personnalisés
+    // Les colonnes que NOUS décidons d'afficher
     const titres = [
-        "📅 Date",
-        "🕒 Heure",
-        "📈 Pression",
-        "🌡️ Température",
-        "💧 Humidité",
-        "🌫️ Point de rosée",
-        "🔥 Indice de chaleur",
-        "🌬️ Vent moyen",
-        "💨 Rafale",
-        "🥶 Refroidissement éolien"
+        { nom: "📅 Date", unite: "" },
+        { nom: "🕒 Heure", unite: "" },
+        { nom: "📈 Pression", unite: "hPa" },
+        { nom: "🌡️ Température", unite: "°C" },
+        { nom: "💧 Humidité", unite: "%" },
+        { nom: "🌫️ Point de rosée", unite: "°C" },
+        { nom: "🔥 Indice de chaleur", unite: "°C" },
+        { nom: "🌬️ Vent moyen", unite: "km/h" },
+        { nom: "💨 Rafale", unite: "km/h" },
+        { nom: "🥶 Refroidissement éolien", unite: "°C" }
     ];
-
-    // Unités (4e ligne du fichier Bresser)
-    const unites = lignes[3].split(";");
 
     let html = "<table>";
 
-    // Ligne des titres
+    // Ligne d'en-tête
     html += "<tr>";
 
-    for (let i = 0; i < titres.length; i++) {
+    titres.forEach(colonne => {
 
-        let titre = titres[i];
+        html += `
+        <th>
+            ${colonne.nom}
+            ${colonne.unite ? `<br><small>${colonne.unite}</small>` : ""}
+        </th>`;
 
-        if (unites[i]) {
-            titre += `<br><small>${unites[i]}</small>`;
-        }
-
-        html += `<th>${titre}</th>`;
-    }
+    });
 
     html += "</tr>";
 
-    // Les données commencent après les 4 lignes d'en-tête
+    // Les données commencent à la 5e ligne du fichier Bresser
     for (let i = 4; i < lignes.length; i++) {
 
         const colonnes = lignes[i].split(";");
 
-        if (colonnes.length < titres.length) continue;
+        if (colonnes.length < 10) continue;
 
         html += "<tr>";
 
-        for (let j = 0; j < titres.length; j++) {
+        for (let j = 0; j < 10; j++) {
+
             html += `<td>${colonnes[j]}</td>`;
+
         }
 
         html += "</tr>";
+
     }
 
     html += "</table>";
