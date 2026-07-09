@@ -68,3 +68,8 @@ tr:nth-child(even) {
 tr:hover {
     background: #42526b;
 }
+small{
+    color:#d8d8d8;
+    font-size:12px;
+    font-weight:normal;
+}
