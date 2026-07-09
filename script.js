@@ -1,51 +1,92 @@
+// ==========================================
+// ADN MÉTÉO
+// Lecture du fichier latest.csv
+// ==========================================
+
 async function chargerDonnees() {
 
+    // Lecture du fichier CSV
     const reponse = await fetch("data/latest.csv");
     const texte = await reponse.text();
 
+    // Découpage ligne par ligne
     const lignes = texte.trim().split("\n");
 
-    // Les colonnes que NOUS décidons d'afficher
+    // Vérifie qu'il existe des données
+    if (lignes.length < 5) {
+        console.log("Pas assez de données.");
+        return;
+    }
+
+    // ==========================================
+    // DERNIÈRE OBSERVATION
+    // ==========================================
+
+    const derniere = lignes[lignes.length - 1].split(";");
+
+    document.getElementById("temp").textContent = derniere[3] + " °C";
+    document.getElementById("hum").textContent = derniere[4] + " %";
+    document.getElementById("pres").textContent = derniere[2] + " hPa";
+    document.getElementById("vent").textContent = derniere[7] + " km/h";
+    document.getElementById("rafale").textContent = derniere[8] + " km/h";
+
+    // ==========================================
+    // TABLEAU
+    // ==========================================
+
     const titres = [
-        { nom: "📅 Date", unite: "" },
-        { nom: "🕒 Heure", unite: "" },
-        { nom: "📈 Pression", unite: "hPa" },
-        { nom: "🌡️ Température", unite: "°C" },
-        { nom: "💧 Humidité", unite: "%" },
-        { nom: "🌫️ Point de rosée", unite: "°C" },
-        { nom: "🔥 Indice de chaleur", unite: "°C" },
-        { nom: "🌬️ Vent moyen", unite: "km/h" },
-        { nom: "💨 Rafale", unite: "km/h" },
-        { nom: "🥶 Refroidissement éolien", unite: "°C" }
+        "📅 Date",
+        "🕒 Heure",
+        "📈 Pression",
+        "🌡️ Température",
+        "💧 Humidité",
+        "🌫️ Point de rosée",
+        "🔥 Indice de chaleur",
+        "🌬️ Vent moyen",
+        "💨 Rafale",
+        "🥶 Refroidissement éolien"
+    ];
+
+    const unites = [
+        "",
+        "",
+        "hPa",
+        "°C",
+        "%",
+        "°C",
+        "°C",
+        "km/h",
+        "km/h",
+        "°C"
     ];
 
     let html = "<table>";
 
-    // Ligne d'en-tête
     html += "<tr>";
 
-    titres.forEach(colonne => {
+    for (let i = 0; i < titres.length; i++) {
 
         html += `
         <th>
-            ${colonne.nom}
-            ${colonne.unite ? `<br><small>${colonne.unite}</small>` : ""}
+            ${titres[i]}
+            ${unites[i] ? `<br><small>${unites[i]}</small>` : ""}
         </th>`;
 
-    });
+    }
 
     html += "</tr>";
 
-    // Les données commencent à la 5e ligne du fichier Bresser
+    // Les données commencent après les 4 lignes d'en-tête Bresser
+
     for (let i = 4; i < lignes.length; i++) {
 
         const colonnes = lignes[i].split(";");
 
-        if (colonnes.length < 10) continue;
+        if (colonnes.length < titres.length) continue;
 
         html += "<tr>";
 
-        for (let j = 0; j < 10; j++) {
+        for (let j = 0; j < titres.length; j++) {
 
             html += `<td>${colonnes[j]}</td>`;
 
@@ -57,15 +98,6 @@ async function chargerDonnees() {
 
     html += "</table>";
 
-    // Dernière ligne du fichier = dernières mesures
-const derniere = lignes[lignes.length - 1].split(";");
-
-// Remplit les cartes
-document.getElementById("temp").textContent = derniere[3] + " °C";
-document.getElementById("hum").textContent = derniere[4] + " %";
-document.getElementById("pres").textContent = derniere[2] + " hPa";
-document.getElementById("vent").textContent = derniere[7] + " km/h";
-document.getElementById("rafale").textContent = derniere[8] + " km/h";
     document.getElementById("tableau").innerHTML = html;
 
 }
