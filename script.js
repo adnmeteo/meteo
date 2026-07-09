@@ -3,9 +3,10 @@
 // Lecture du fichier latest.csv
 // ==========================================
 
+let graphique = null;
+
 async function chargerDonnees() {
 
-    // Lecture du fichier CSV
     const reponse = await fetch("data/latest.csv");
     const texte = await reponse.text();
 
@@ -16,9 +17,9 @@ async function chargerDonnees() {
         return;
     }
 
-    // ==========================================
+    // ==========================
     // DERNIÈRE OBSERVATION
-    // ==========================================
+    // ==========================
 
     const derniere = lignes[lignes.length - 1].split(";");
 
@@ -30,9 +31,9 @@ async function chargerDonnees() {
     document.getElementById("hum").textContent = derniere[4] + " %";
     document.getElementById("pres").textContent = derniere[2] + " hPa";
 
-    // ==========================================
+    // ==========================
     // TABLEAU
-    // ==========================================
+    // ==========================
 
     const titres = [
         "📅 Date",
@@ -70,9 +71,9 @@ async function chargerDonnees() {
 
     html += "</tr>";
 
-    // ==========================================
-    // DONNÉES
-    // ==========================================
+    // ==========================
+    // DONNÉES DES GRAPHIQUES
+    // ==========================
 
     const heures = [];
     const temperatures = [];
@@ -88,6 +89,7 @@ async function chargerDonnees() {
         if (colonnes.length < titres.length) continue;
 
         heures.push(colonnes[1]);
+
         pressions.push(parseFloat(colonnes[2]));
         temperatures.push(parseFloat(colonnes[3]));
         humidites.push(parseFloat(colonnes[4]));
@@ -110,51 +112,56 @@ async function chargerDonnees() {
 
     document.getElementById("tableau").innerHTML = html;
 
-    // ==========================================
-    // LISTE DES VARIABLES
-    // ==========================================
+    // ==========================
+    // VARIABLES DISPONIBLES
+    // ==========================
 
     const variables = {
 
         temperature: {
-            label: "🌡️ Température (°C)",
-            data: temperatures,
-            couleur: "#4fc3f7"
+            titre: "🌡️ Température",
+            unite: "°C",
+            couleur: "#4fc3f7",
+            valeurs: temperatures
         },
 
         humidite: {
-            label: "💧 Humidité (%)",
-            data: humidites,
-            couleur: "#64ffda"
+            titre: "💧 Humidité",
+            unite: "%",
+            couleur: "#64ffda",
+            valeurs: humidites
         },
 
         pression: {
-            label: "📈 Pression (hPa)",
-            data: pressions,
-            couleur: "#ffd54f"
+            titre: "📈 Pression",
+            unite: "hPa",
+            couleur: "#ffd54f",
+            valeurs: pressions
         },
 
         rosee: {
-            label: "🌫️ Point de rosée (°C)",
-            data: pointRosee,
-            couleur: "#ba68c8"
+            titre: "🌫️ Point de rosée",
+            unite: "°C",
+            couleur: "#ba68c8",
+            valeurs: pointRosee
         },
 
         chaleur: {
-            label: "🔥 Indice de chaleur (°C)",
-            data: indiceChaleur,
-            couleur: "#ff7043"
+            titre: "🔥 Indice de chaleur",
+            unite: "°C",
+            couleur: "#ff7043",
+            valeurs: indiceChaleur
         }
 
     };
 
-    // ==========================================
-    // GRAPHIQUE
-    // ==========================================
-
     const ctx = document.getElementById("graphTemp");
 
-    const graphique = new Chart(ctx, {
+    // ==========================================
+    // CRÉATION DU GRAPHIQUE
+    // ==========================================
+
+    graphique = new Chart(ctx, {
 
         type: "line",
 
@@ -164,21 +171,21 @@ async function chargerDonnees() {
 
             datasets: [{
 
-                label: variables.temperature.label,
+                label: variables.temperature.titre,
 
-                data: variables.temperature.data,
+                data: variables.temperature.valeurs,
 
                 borderColor: variables.temperature.couleur,
 
                 backgroundColor: variables.temperature.couleur + "33",
 
-                borderWidth: 2,
-
-                fill: true,
+                borderWidth: 3,
 
                 pointRadius: 0,
 
-                tension: 0.3
+                tension: 0.35,
+
+                fill: true
 
             }]
 
@@ -187,6 +194,16 @@ async function chargerDonnees() {
         options: {
 
             responsive: true,
+
+            maintainAspectRatio: false,
+
+            interaction: {
+
+                intersect: false,
+
+                mode: "index"
+
+            },
 
             plugins: {
 
@@ -208,7 +225,13 @@ async function chargerDonnees() {
 
                     ticks: {
 
-                        color: "white"
+                        color: "#d8d8d8"
+
+                    },
+
+                    grid: {
+
+                        color: "#3d4b5a"
 
                     }
 
@@ -218,7 +241,13 @@ async function chargerDonnees() {
 
                     ticks: {
 
-                        color: "white"
+                        color: "#d8d8d8"
+
+                    },
+
+                    grid: {
+
+                        color: "#3d4b5a"
 
                     }
 
@@ -231,19 +260,36 @@ async function chargerDonnees() {
     });
 
     // ==========================================
-    // CHANGEMENT DE COURBE
+    // BOUTONS DES GRAPHIQUES
     // ==========================================
 
-    document.getElementById("choixGraph").addEventListener("change", function () {
+    const boutons = document.querySelectorAll(".graph-btn");
 
-        const choix = variables[this.value];
+    boutons.forEach(bouton => {
 
-        graphique.data.datasets[0].label = choix.label;
-        graphique.data.datasets[0].data = choix.data;
-        graphique.data.datasets[0].borderColor = choix.couleur;
-        graphique.data.datasets[0].backgroundColor = choix.couleur + "33";
+        bouton.addEventListener("click", () => {
 
-        graphique.update();
+            boutons.forEach(b => b.classList.remove("active"));
+
+            bouton.classList.add("active");
+
+            const choix = variables[bouton.dataset.graph];
+
+            graphique.data.datasets[0].label =
+                choix.titre + " (" + choix.unite + ")";
+
+            graphique.data.datasets[0].data =
+                choix.valeurs;
+
+            graphique.data.datasets[0].borderColor =
+                choix.couleur;
+
+            graphique.data.datasets[0].backgroundColor =
+                choix.couleur + "33";
+
+            graphique.update();
+
+        });
 
     });
 
