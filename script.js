@@ -85,8 +85,8 @@ async function chargerDonnees() {
     const heures = [];
     const temperatures = [];
 
-    for (let i = 4; i < lignes.length; i++) {
-
+    for (let i = lignes.length - 1; i >= 4; i--) {
+        
         const colonnes = lignes[i].split(";");
 
         if (colonnes.length < titres.length) continue;
