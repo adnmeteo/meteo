@@ -128,3 +128,34 @@ font-weight:bold;
 color:#4fc3f7;
 
 }
+
+/* ===== Cartes des dernières observations ===== */
+
+.cartes{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.carte{
+    flex:1;
+    min-width:140px;
+    background:#364250;
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
+}
+
+.carte h3{
+    margin:0;
+    font-size:16px;
+    color:white;
+}
+
+.carte p{
+    margin-top:8px;
+    font-size:20px;
+    font-weight:bold;
+    color:#6fd9ff;
+}
