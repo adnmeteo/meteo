@@ -18,7 +18,7 @@ jobs:
 
       - name: Download latest weather data
         run: |
-          curl "https://api.weather.com/v2/pws/observations/current?stationId=${{ secrets.STATION_ID }}&format=json&units=m&apiKey=${{ secrets.WU_API_KEY }}" -o weather.json
+          curl "https://api.weather.com/v2/pws/observations/current?stationId=${{ secrets.WU_STATION_ID }}&format=json&units=m&apiKey=${{ secrets.WU_API_KEY }}" -o weather.json
 
       - name: Convert JSON to CSV
         run: |
