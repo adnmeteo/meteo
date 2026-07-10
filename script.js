@@ -207,20 +207,49 @@ async function chargerDonnees() {
 
             plugins: {
 
-                legend: {
+    legend: {
 
-                    labels: {
+        labels: {
 
-                        color: "white"
+            color: "white"
 
-                    }
+        }
 
-                }
+    },
+
+    zoom: {
+
+        pan: {
+
+            enabled: true,
+            mode: "x"
+
+        },
+
+        zoom: {
+
+            wheel: {
+
+                enabled: true
 
             },
 
-            scales: {
+            pinch: {
 
+                enabled: true
+
+            },
+
+            mode: "x"
+
+        }
+
+    }
+
+},
+
+scales: {
+    
                 x: {
 
                     ticks: {
