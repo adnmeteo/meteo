@@ -1,0 +1,58 @@
+name: Update Weather Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download latest weather data
+        run: |
+          curl "https://api.weather.com/v2/pws/observations/current?stationId=${{ secrets.STATION_ID }}&format=json&units=m&apiKey=${{ secrets.WU_API_KEY }}" -o weather.json
+
+      - name: Convert JSON to CSV
+        run: |
+          python3 << 'EOF'
+          import json
+          import csv
+
+          with open("weather.json") as f:
+              data = json.load(f)
+
+          obs = data["observations"][0]
+
+          with open("data/latest.csv", "w", newline="") as f:
+              writer = csv.writer(f, delimiter=";")
+              writer.writerow([
+                  "Date",
+                  "Heure",
+                  "Température",
+                  "Humidité",
+                  "Pression"
+              ])
+              writer.writerow([
+                  obs["obsTimeLocal"][:10],
+                  obs["obsTimeLocal"][11:19],
+                  obs["metric"]["temp"],
+                  obs["humidity"],
+                  obs["metric"]["pressure"]
+              ])
+          EOF
+
+      - name: Commit latest.csv
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/latest.csv
+          git diff --cached --quiet || git commit -m "Mise à jour automatique des données météo"
+          git push
