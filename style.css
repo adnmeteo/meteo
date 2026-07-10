@@ -266,3 +266,31 @@ nav a:hover{
     border-radius:15px;
 
 }
+
+/* ============================= */
+/* Curseur temporel */
+/* ============================= */
+
+.timeline-container{
+
+    width:95%;
+    margin:20px auto;
+
+}
+
+#timeSlider{
+
+    width:100%;
+    cursor:pointer;
+
+}
+
+#periodeAffichee{
+
+    margin-top:10px;
+    text-align:center;
+    font-weight:bold;
+    color:white;
+    font-size:16px;
+
+}
