@@ -12,9 +12,8 @@ async function chargerDonnees() {
 
     const lignes = texte.trim().split("\n");
 
-    if (lignes.length < 5) {
-        console.log("Pas assez de données.");
-        return;
+    if (lignes.length < 2) {
+    
     }
 
     // ==========================
