@@ -80,9 +80,8 @@ async function chargerDonnees() {
     const pressions = [];
     const pointRosee = [];
     const indiceChaleur = [];
-
-    for (let i = lignes.length - 1; i >= 4; i--) {
-
+    
+    for (let i = lignes.length - 1; i >= 1; i--) {
         const colonnes = lignes[i].split(";");
 
         if (colonnes.length < titres.length) continue;
